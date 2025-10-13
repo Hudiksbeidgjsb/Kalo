@@ -127,7 +127,7 @@ void *udp_flood(void *args) {
 int main(int argc, char *argv[]) {
     if (argc != 5) {
         printf("Usage: %s <IP> <PORT> <DURATION> <THREADS>\n", argv[0]);
-        printf("Example: %s 192.168.1.1 80 60 10\n");
+        printf("Example: %s 192.168.1.1 80 60 10\n", argv[0]);  // FIXED LINE
         exit(EXIT_FAILURE);
     }
 
