@@ -108,7 +108,11 @@ void* flood_thread(void* arg) {
     for (int i = 0; i < BATCH_SIZE; i++) {
         payloads[i] = malloc(PACKET_SIZE);
         if (urandom) {
-            fread(payloads[i], 1, PACKET_SIZE, urandom);
+            size_t bytes_read = fread(payloads[i], 1, PACKET_SIZE, urandom);
+            if (bytes_read != PACKET_SIZE) {
+                // Fill remaining with pattern if short read
+                memset(payloads[i] + bytes_read, i % 256, PACKET_SIZE - bytes_read);
+            }
         } else {
             memset(payloads[i], i % 256, PACKET_SIZE); // Fallback pattern
         }
@@ -138,18 +142,18 @@ void* flood_thread(void* arg) {
             }
         }
         
-        // Update global counters
+        // Update global counters - FIXED SYNTAX
         if (local_packets > 5000) {
-            __sync_fetch_add(&total_packets, local_packets);
-            __sync_fetch_add(&total_bytes, local_bytes);
+            __sync_fetch_and_add(&total_packets, local_packets);
+            __sync_fetch_and_add(&total_bytes, local_bytes);
             local_packets = 0;
             local_bytes = 0;
         }
     }
     
-    // Final update
-    __sync_fetch_add(&total_packets, local_packets);
-    __sync_fetch_add(&total_bytes, local_bytes);
+    // Final update - FIXED SYNTAX
+    __sync_fetch_and_add(&total_packets, local_packets);
+    __sync_fetch_and_add(&total_bytes, local_bytes);
     
     // Cleanup
     for (int i = 0; i < BATCH_SIZE; i++) {
