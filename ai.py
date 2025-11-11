@@ -566,9 +566,9 @@ Just send me a message to start chatting!
 
 def main():
     # Replace with your actual Telegram Bot Token
-    BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN_HERE"
+    BOT_TOKEN = "8038917688:AAHDo_FO19MYuHOkXmsKCcuSuJ3McqwOrAU"
     
-    if BOT_TOKEN == "YOUR_TELEGRAM_BOT_TOKEN_HERE":
+    if BOT_TOKEN == "8038917688:AAHDo_FO19MYuHOkXmsKCcuSuJ3McqwOrAU":
         print("❌ ERROR: Please replace 'YOUR_TELEGRAM_BOT_TOKEN_HERE' with your actual Telegram Bot Token")
         print("Get your token from @BotFather on Telegram")
         return
